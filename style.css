@@ -3,7 +3,16 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
-}
+   background-image: url(photo_2025-09-29_10-08-45.jpg);
+background-repeat:inherit;
+background-position: top;
+background-attachment: fixed;} 
+form{
+     background-image: url(photo_2025-09-29_10-08-45.jpg);
+background-repeat:inherit;
+background-position: top;
+background-attachment: fixed;} 
+
 
 .container {
     max-width: 400px;
@@ -18,7 +27,7 @@ h1 {
     text-align: center;
 }
 
-label {
+label {color: #f4f4f4;
     display: block;
     margin: 10px 0 5px;
 }
@@ -36,8 +45,10 @@ button {
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
-}
+    cursor: pointer;}
+
+
+
 
 button:hover {
     background-color: #218838;
