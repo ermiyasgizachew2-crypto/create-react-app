@@ -1,0 +1,39 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #5641b3;
+}
+
+.container {color: black;
+    text-align: center;
+}
+
+canvas {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+}
+
+.controls {
+    margin-top: 10px;
+}
+
+button {color: blue;
+    margin: 5px;
+    padding: 10px 15px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.gallery img {
+    width: 100px;
+    height: auto;
+    margin: 5px;
+}
