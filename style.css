@@ -1,39 +1,87 @@
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #5641b3;
+body { background-color: blueviolet;
+background-image: url(photo_2025-09-28_23-49-09);
+background-repeat: no-repeat;
+background-position: top;
+background-attachment: fixed;}
+h1{ color: aliceblue; background-color:black}
+* {
+    box-sizing: border-box;
 }
 
-.container {color: black;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+header {
+    background: #333;
+    color: #fff;
+    padding: 20px 0;
     text-align: center;
 }
 
-canvas {
-    margin-top: 20px;
-    border: 1px solid #ccc;
+.upload-section,
+.font-info-section {
+    margin-bottom: 30px;
 }
 
-.controls {
-    margin-top: 10px;
+.drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-button {color: blue;
-    margin: 5px;
-    padding: 10px 15px;
+.drop-area:hover {
+    background-color: #eaeaea;
+}
+
+#fileInput {
+    display: none; /* Hide the default file input */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
 }
 
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
     margin-top: 20px;
 }
 
-.gallery img {
-    width: 100px;
-    height: auto;
-    margin: 5px;
+#galleryContainer {
+    display: flex;
+    flex-wrap: wrap;
 }
+
+.preview-item {
+    margin: 10px;
+}
+
+.preview-item img,
+.preview-item video {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 10px;
+}
+
+.font-info-section {
+    margin-top: 30px;
+}
+
+#fontDisplay {
+    margin-top: 20px;
+}
+

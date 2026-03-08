@@ -1,50 +1,97 @@
-const upload = document.getElementById('upload');
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const blurButton = document.getElementById('blurButton');
-const resetButton = document.getElementById('resetButton');
-const downloadButton = document.getElementById('downloadButton');
-const gallery = document.getElementById('gallery');
+const dropArea = document.getElementById('dropArea');
+const fileInput = document.getElementById('fileInput');
+const galleryContainer = document.getElementById('galleryContainer');
+const uploadButton = document.getElementById('uploadButton');
+const fontForm = document.getElementById('fontForm');
+const fontDisplay = document.getElementById('fontDisplay');
 
-let image = new Image();
+// Prevent default drag behaviors
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false);
+    document.body.addEventListener(eventName, preventDefaults, false);
+});
 
-upload.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+// Highlight drop area when item is dragged over it
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false);
+});
 
-    reader.onload = function(e) {
-        image.src = e.target.result;
-        image.onload = function() {
-            canvas.width = image.width;
-            canvas.height = image.height;
-            context.drawImage(image, 0, 0);
-        };
-    };
+// Remove highlight when item is dragged away
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false);
+});
 
-    if (file) {
-        reader.readAsDataURL(file);
+// Handle dropped files
+dropArea.addEventListener('drop', handleDrop, false);
+dropArea.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', handleFiles);
+
+// Handle upload button click
+uploadButton.addEventListener('click', () => {
+    const files = fileInput.files;
+    if (files.length > 0) {
+        handleFiles({ target: { files } });
     }
 });
 
-blurButton.addEventListener('click', () => {
-    context.filter = 'blur(5px)';
-    context.drawImage(image, 0, 0);
-    addToGallery(canvas.toDataURL());
+// Handle font form submission
+fontForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const fontName = document.getElementById('fontName').value;
+    const fontSize = document.getElementById('fontSize').value;
+
+    const fontInfo = document.createElement('div');
+    fontInfo.style.fontFamily = fontName;
+    fontInfo.style.fontSize = ${fontSize}px;
+    fontInfo.textContent = Sample Text in ${fontName} (${fontSize}px);
+    
+    fontDisplay.innerHTML = ''; // Clear previous font info
+    fontDisplay.appendChild(fontInfo);
 });
 
-resetButton.addEventListener('click', () => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-});
-
-downloadButton.addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'blurred-image.png';
-    link.href = canvas.toDataURL();
-    link.click();
-});
-
-function addToGallery(dataUrl) {
-    const img = document.createElement('img');
-    img.src = dataUrl;
-    gallery.appendChild(img);
+function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
 }
+
+function highlight() {
+    dropArea.classList.add('highlight');
+}
+
+function unhighlight() {
+    dropArea.classList.remove('highlight');
+}
+
+function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    handleFiles({ target: { files } });
+}
+
+function handleFiles({ target: { files } }) {
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const previewItem = document.createElement('div');
+            previewItem.classList.add('preview-item');
+
+            if (file.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                previewItem.appendChild(img);
+            } else if (file.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.src = event.target.result;
+                video.controls = true; // Add controls for video playback
+                previewItem.appendChild(video);
+            }
+
+            galleryContainer.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+

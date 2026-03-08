@@ -2,25 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-   
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="style.css">  <title>Photo Blur Filter App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="style.css">
+    <title>Media Generator</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Photo Blur Filter Application</h1>
-        <input type="file" id="upload" accept="image/*">
-        <canvas id="canvas"></canvas>
-        <div class="controls">
-            <button id="blurButton">Apply Blur</button>
-            <button id="resetButton">Reset</button>
-            <button id="downloadButton">Download Image</button>
-        </div>
-        <div class="gallery" id="gallery"></div>
-    </div>
+    <header>
+        <h1>Media Generator</h1>
+        <p>Create stunning visuals and videos!</p>
+    </header>
+    
+    <main>
+        <section class="upload-section">
+            <h2>Upload Your Media</h2>
+            <div class="drop-area" id="dropArea">
+                <p>Drag & drop your images/videos here or click to select files</p>
+                <input type="file" id="fileInput" accept="image/*,video/*" multiple />
+            </div>
+            <button id="uploadButton">Upload</button>
+        </section>
+
+        <section class="font-info-section">
+            <h2>Font Information</h2>
+            <form id="fontForm">
+                <label for="fontName">Font Name:</label>
+                <input type="text" id="fontName" required>
+                <label for="fontSize">Font Size (px):</label>
+                <input type="number" id="fontSize" required min="1">
+                <button type="submit">Submit Font Info</button>
+            </form>
+            <div id="fontDisplay"></div>
+        </section>
+
+        <section class="gallery">
+            <h2>Media Gallery</h2>
+            <div id="galleryContainer"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Media Generator. All rights reserved.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
+
+ 
+
 
