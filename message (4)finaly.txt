@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ermi Antereth | Premium Forex Trading & Live Market Signals</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#050811',
+                        darkCard: 'rgba(12, 20, 39, 0.7)',
+                        accentTeal: '#00f2fe',
+                        accentGreen: '#00e676',
+                        accentBlue: '#0a84ff',
+                        neonPurple: '#bf5af2',
+                        gridLine: '#1a243d',
+                        binanceGold: '#F3BA2F'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Space Grotesk', 'sans-serif']
+                    },
+                    boxShadow: {
+                        tealGlow: '0 0 20px rgba(0, 242, 254, 0.25)',
+                        greenGlow: '0 0 20px rgba(0, 230, 118, 0.25)',
+                        goldGlow: '0 0 20px rgba(243, 186, 47, 0.25)',
+                        cardNeon: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js (For 3D interactive chart simulation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050811;
+            overflow-x: hidden;
+        }
+        
+        .font-tech {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Glassmorphism utility */
+        .glass-panel {
+            background: rgba(10, 17, 34, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(243, 186, 47, 0.4);
+            background: rgba(12, 22, 44, 0.8);
+            box-shadow: 0 0 25px rgba(243, 186, 47, 0.15);
+            transform: translateY(-2px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050811;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e294b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F3BA2F;
+        }
+
+        /* Glowing text elements */
+        .text-neon-glow {
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.6);
+        }
+        .text-gold-glow {
+            text-shadow: 0 0 10px rgba(243, 186, 47, 0.6);
+        }
+
+        /* Matrix scan line animation */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(243, 186, 47, 0.08) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04));
+            z-index: 2;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200 antialiased">
+
+    <!-- Background Glows -->
+    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#F3BA2F]/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+    <div class="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#00e676]/5 rounded-full blur-[150px] pointer-events-none z-0"></div>
+
+    <!-- Top Premium Ticker Bar & Payment Banner -->
+    <div class="w-full bg-[#02050b] border-b border-white/5 py-2 px-4 text-xs font-tech tracking-wider z-50 relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2 overflow-hidden">
+            <div class="flex items-center space-x-4 shrink-0">
+                <span class="flex items-center text-slate-400 gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    SYSTEM ACTIVE
+                </span>
+                <span class="text-[#F3BA2F] flex items-center gap-1">
+                    <i class="fa-solid fa-cube text-[10px]"></i> BSC BEP-20 NETWORK VERIFIED
+                </span>
+            </div>
+            
+            <!-- Click to Copy direct bar -->
+            <button onclick="copyWalletAddress()" class="flex items-center space-x-2 bg-[#121c33] hover:bg-[#1c2c4d] px-3 py-1 rounded text-[10px] text-white border border-white/10 transition-all cursor-pointer">
+                <span class="text-slate-400 font-mono">BEP-20:</span>
+                <span class="font-mono text-[#F3BA2F]">0x8c4a...646c</span>
+                <i class="fa-regular fa-copy"></i>
+            </button>
+
+            <div class="flex items-center space-x-6 text-slate-300">
+                <div class="flex items-center space-x-2">
+                    <span class="font-semibold text-white">XAU/USD</span>
+                    <span class="text-emerald-400" id="ticker-xau">2,328.45 (+1.42%)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="font-semibold text-white">EUR/USD</span>
+                    <span class="text-emerald-400" id="ticker-eur">1.0845 (+0.12%)</span>
+                </div>
+                <div class="hidden sm:flex items-center space-x-2">
+                    <span class="font-semibold text-white">BTC/USD</span>
+                    <span class="text-emerald-400" id="ticker-btc">65,820.00 (+2.88%)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 w-full z-40 transition-all duration-300 border-b border-white/5 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-tr from-binanceGold to-accentTeal flex items-center justify-center shadow-goldGlow">
+                    <i class="fa-solid fa-chart-line text-black font-extrabold text-lg"></i>
+                </div>
+                <div>
+                    <span class="font-tech text-xl font-bold tracking-tight text-white block">ERMI ANTERETH</span>
+                    <span class="text-[9px] font-mono tracking-widest text-binanceGold block">FOREX TRADER VIP</span>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#hero" class="hover:text-white transition-colors">VIP Feed</a>
+                <a href="#strategy" class="hover:text-white transition-colors">SK System</a>
+                <a href="#proof" class="hover:text-white transition-colors">Verified Results</a>
+                <a href="#pricing" class="hover:text-white transition-colors">Pricing Portal</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <button onclick="handleSubscribe('Lifetime Pass')" class="relative group overflow-hidden rounded-lg p-[1px] focus:outline-none hidden sm:inline-block">
+                    <span class="absolute inset-0 bg-gradient-to-r from-[#F3BA2F] to-accentTeal rounded-lg"></span>
+                    <div class="px-5 py-2 rounded-[7px] bg-[#050811] text-xs font-tech font-bold text-white tracking-wider group-hover:bg-transparent transition-all duration-300">
+                        UNLOCK VIP SIGNALS
+                    </div>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white focus:outline-none" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#070b16] border-b border-white/10 px-4 py-4 space-y-3">
+            <a href="#hero" class="block py-2 text-sm text-slate-300 hover:text-[#F3BA2F] transition-colors">VIP Feed</a>
+            <a href="#strategy" class="block py-2 text-sm text-slate-300 hover:text-[#F3BA2F] transition-colors">SK System</a>
+            <a href="#proof" class="block py-2 text-sm text-slate-300 hover:text-[#F3BA2F] transition-colors">Verified Results</a>
+            <a href="#pricing" class="block py-2 text-sm text-slate-300 hover:text-[#F3BA2F] transition-colors font-bold">VIP Pricing</a>
+            <button onclick="handleSubscribe('Lifetime Pass')" class="block w-full text-center py-2.5 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-bold font-tech text-xs rounded-lg">
+                GET VIP VIA BEP-20
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero / Terminal Sandbox Section -->
+    <section id="hero" class="relative min-h-[90vh] flex items-center pt-8 pb-16 overflow-hidden z-10">
+        <!-- Background grid overlay -->
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#141e33_1px,transparent_1px),linear-gradient(to_bottom,#141e33_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Hero Left: Sales Copy -->
+                <div class="lg:col-span-5 space-y-6 text-left relative z-20">
+                    <div class="inline-flex items-center space-x-2 bg-yellow-500/10 border border-yellow-500/20 px-3 py-1 rounded-full text-xs font-tech text-[#F3BA2F]">
+                        <span class="w-2 h-2 rounded-full bg-[#F3BA2F] animate-ping"></span>
+                        <span>100% Sure Live Market Target Alignments</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none text-white font-tech">
+                        Rule-Based <br>
+                        <span class="bg-gradient-to-r from-[#F3BA2F] via-[#ffd666] to-accentTeal bg-clip-text text-transparent font-black">Forex Mastery</span>
+                    </h1>
+
+                    <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-lg">
+                        Execute raw, rule-based algorithmic trading signals led by <strong class="text-white">Ermi Antereth</strong>. We trade pure liquid assets: <strong class="text-[#F3BA2F]">XAU/USD</strong>, <strong class="text-[#F3BA2F]">EUR/USD</strong>, <strong class="text-accentGreen">BTC/USD</strong>, and <strong class="text-accentTeal">DXY</strong> using high-precision entries.
+                    </p>
+
+                    <!-- Bullet Technical Highlights -->
+                    <div class="grid grid-cols-2 gap-4 pt-2">
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-compass-drafting text-[#F3BA2F] mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-xs font-tech">MSNR / OB ENTRY</h4>
+                                <p class="text-[11px] text-slate-500">Market Structure Net Liquidity & Order Block</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-arrows-spin text-accentGreen mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-xs font-tech">RBS / SBR FLIPS</h4>
+                                <p class="text-[11px] text-slate-500">Support becomes Resistance, Resistance becomes Support</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-layer-group text-accentTeal mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-xs font-tech">OCL INTERSECTS</h4>
+                                <p class="text-[11px] text-slate-500">Overlapping Candle Level ultra entry</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-2.5">
+                            <i class="fa-solid fa-shield-halved text-accentGreen mt-1"></i>
+                            <div>
+                                <h4 class="text-white font-bold text-xs font-tech">SK SYSTEM COMPLIANT</h4>
+                                <p class="text-[11px] text-slate-500">100% rules-aligned, clear validation zones</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <button onclick="handleSubscribe('Lifetime Pass')" class="text-center px-8 py-4 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-tech font-bold text-sm tracking-wider rounded-lg shadow-goldGlow hover:scale-105 hover:shadow-yellow-400/40 transition-all duration-300 cursor-pointer">
+                            GET LIVE SIGNALS VIA BEP-20 <i class="fa-solid fa-wallet ml-2"></i>
+                        </button>
+                        <a href="#strategy" class="text-center px-8 py-4 bg-transparent border border-white/10 hover:border-white/20 hover:bg-white/5 text-white font-tech text-sm tracking-wider rounded-lg transition-all">
+                            EXPLORE STRATEGY
+                        </a>
+                    </div>
+
+                    <!-- Trust Stats -->
+                    <div class="pt-6 border-t border-white/5 flex items-center justify-between sm:justify-start sm:space-x-12">
+                        <div>
+                            <span class="block text-2xl font-bold font-tech text-white">94.2%</span>
+                            <span class="text-xs text-slate-500">Signal Win Rate</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold font-tech text-emerald-400">1:3.5+</span>
+                            <span class="text-xs text-slate-500">Avg Risk Reward</span>
+                        </div>
+                        <div>
+                            <span class="block text-2xl font-bold font-tech text-white">4,200+</span>
+                            <span class="text-xs text-slate-500">Global Members</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right: Interactive Dashboard Simulator & Active VIP Signal Ticker -->
+                <div class="lg:col-span-7 relative z-20">
+                    <!-- Glow element -->
+                    <div class="absolute -inset-1.5 bg-gradient-to-r from-binanceGold to-accentTeal rounded-xl blur-lg opacity-15"></div>
+                    
+                    <!-- Main Live Terminal Widget -->
+                    <div class="relative glass-panel rounded-xl overflow-hidden shadow-2xl border border-white/10 scanline">
+                        
+                        <!-- Header Terminal Controls -->
+                        <div class="bg-[#03060c] border-b border-white/5 px-4 py-3 flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                                <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                                <span class="text-[10px] font-tech text-slate-500 tracking-widest uppercase pl-2">VIP LIVE SANDBOX TERMINAL V4.2</span>
+                            </div>
+                            <div class="flex items-center space-x-2 bg-[#0d1424] px-2.5 py-1 rounded-md">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span class="text-[10px] font-tech font-bold text-emerald-400">LIVE FEED PLAYABLE</span>
+                            </div>
+                        </div>
+
+                        <!-- Active Asset Selector & Action Hub -->
+                        <div class="grid grid-cols-4 border-b border-white/5 bg-[#070b14]/90 text-center font-tech text-xs">
+                            <button onclick="switchLiveSignal('XAUUSD')" id="btn-xauusd" class="py-3 font-semibold border-b-2 border-[#F3BA2F] text-white bg-[#0f192d] transition-all">
+                                XAU/USD
+                            </button>
+                            <button onclick="switchLiveSignal('EURUSD')" id="btn-eurusd" class="py-3 font-semibold border-b-2 border-transparent text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                                EUR/USD
+                            </button>
+                            <button onclick="switchLiveSignal('BTCUSD')" id="btn-btcusd" class="py-3 font-semibold border-b-2 border-transparent text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                                BTC/USD
+                            </button>
+                            <button onclick="switchLiveSignal('DXY')" id="btn-dxy" class="py-3 font-semibold border-b-2 border-transparent text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+                                DXY/USD
+                            </button>
+                        </div>
+
+                        <!-- Core Signal Board -->
+                        <div class="p-6 space-y-6 bg-[#040810]/95 min-h-[380px] flex flex-col justify-between">
+                            
+                            <!-- Signal Block Information -->
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-lg font-bold font-tech text-white" id="sig-asset">XAU/USD (GOLD)</span>
+                                            <span id="sig-type" class="px-2 py-0.5 text-[10px] font-bold tracking-widest text-black bg-accentGreen rounded uppercase">BUY ORDER</span>
+                                        </div>
+                                        <p class="text-xs text-slate-400">Strategy Formulation: <strong class="text-white" id="sig-strat">MSNR + SBR Flip</strong></p>
+                                    </div>
+                                    <div class="text-right space-y-1">
+                                        <span class="block text-xs text-slate-500">EXECUTION TIME</span>
+                                        <span class="block text-xs font-mono font-bold text-accentTeal" id="sig-time">JUST NOW (LIVE)</span>
+                                    </div>
+                                </div>
+
+                                <!-- Key Parameters -->
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-[#0b1222] p-3 rounded-lg border border-white/5">
+                                        <span class="block text-[10px] text-slate-500 font-tech">ENTRY LEVEL</span>
+                                        <span class="text-sm font-bold font-mono text-white" id="sig-entry">2,324.50</span>
+                                    </div>
+                                    <div class="bg-[#0b1222]/60 p-3 rounded-lg border border-white/5">
+                                        <span class="block text-[10px] text-rose-400 font-tech font-bold">STOP LOSS (SL)</span>
+                                        <span class="text-sm font-bold font-mono text-rose-400 animate-pulse" id="sig-sl">2,319.00</span>
+                                    </div>
+                                    <div class="bg-[#0b1222] p-3 rounded-lg border border-white/5">
+                                        <span class="block text-[10px] text-emerald-400 font-tech font-bold">SMT TARGET (TP)</span>
+                                        <span class="text-sm font-bold font-mono text-emerald-400" id="sig-tp">2,341.00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Simulated Visual SVG Chart -->
+                            <div class="bg-[#02050b] rounded-lg p-3 border border-white/5 relative h-36 flex items-end">
+                                <div class="absolute inset-0 flex items-center justify-between px-6 opacity-10 pointer-events-none">
+                                    <span class="text-[10px] text-slate-500">Order Block Zone</span>
+                                    <span class="text-[10px] text-slate-500">SMT Mitigation Zone</span>
+                                </div>
+                                
+                                <!-- Dynamic Path Rendered via SVG -->
+                                <svg class="w-full h-full" id="signal-chart-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="0%" stop-color="#F3BA2F" stop-opacity="0.3"/>
+                                            <stop offset="100%" stop-color="#F3BA2F" stop-opacity="0.0"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="chart-shadow" d="M 0 100 L 50 80 L 100 90 L 150 50 L 200 70 L 250 30 L 300 40 L 400 10 L 400 120 L 0 120 Z" fill="url(#chartGlow)" />
+                                    <path id="chart-line" d="M 0 100 L 50 80 L 100 90 L 150 50 L 200 70 L 250 30 L 300 40 L 400 10" fill="none" stroke="#F3BA2F" stroke-width="2" />
+                                    
+                                    <!-- Dynamic points -->
+                                    <circle cx="250" cy="30" r="4" fill="#00e676" />
+                                    <line x1="0" y1="70" x2="400" y2="70" stroke="rgba(255,255,255,0.1)" stroke-dasharray="4,4" />
+                                    <text x="310" y="65" fill="#888" font-size="8" font-family="monospace">Trendline Break (SK)</text>
+                                </svg>
+
+                                <!-- Floating Indicators on SVG -->
+                                <div class="absolute top-2 left-2 text-[10px] font-mono text-[#F3BA2F] flex items-center gap-1">
+                                    <i class="fa-solid fa-square-rss animate-ping text-xs"></i>
+                                    <span>Signal Live Track Status: <span id="sig-status" class="text-white">WAITING ENTRY</span></span>
+                                </div>
+                            </div>
+
+                            <!-- User Interaction Call to Action Box inside Sandbox -->
+                            <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-white/5 gap-3">
+                                <div class="text-left">
+                                    <span class="text-xs text-slate-400 block">Current Signal Outcome Probability:</span>
+                                    <span class="text-sm font-bold text-[#F3BA2F] font-tech" id="sig-conf">98.7% Confirmed Confidence Level</span>
+                                </div>
+                                <button onclick="triggerSimulatedSuccess()" class="w-full sm:w-auto px-5 py-2.5 bg-slate-900 border border-yellow-500/30 hover:bg-slate-850 text-[#F3BA2F] rounded-md font-tech font-semibold text-xs transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-play"></i> SIMULATE VIP TRIGGER
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Interactive Chart Simulation Banner -->
+    <section class="relative bg-gradient-to-b from-[#050811] via-[#090f1d] to-[#050811] py-16 border-t border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- 3D Canvas Visualizer (Left) -->
+                <div class="lg:col-span-7 relative h-[420px] rounded-xl overflow-hidden glass-panel border border-white/10 flex items-center justify-center shadow-cardNeon group">
+                    <!-- Absolute details overlay -->
+                    <div class="absolute top-4 left-4 z-10 pointer-events-none space-y-1">
+                        <span class="bg-[#F3BA2F]/20 text-[#F3BA2F] border border-[#F3BA2F]/30 text-[9px] font-mono font-bold tracking-widest px-2.5 py-1 rounded">
+                            3D SYSTEM GRAPHICS MODEL
+                        </span>
+                        <h3 class="text-white font-bold text-sm font-tech">Interactive Liquidity Mapping (MSNR)</h3>
+                        <p class="text-[11px] text-slate-500">Left-click and drag to rotate the order block environment.</p>
+                    </div>
+
+                    <div class="absolute bottom-4 right-4 z-10 pointer-events-none text-right">
+                        <span class="text-[10px] font-mono text-emerald-400 block">Active nodes: 32</span>
+                        <span class="text-[10px] font-mono text-slate-500 block">SBR Intersects highlighted</span>
+                    </div>
+
+                    <!-- The 3D Canvas itself -->
+                    <div id="threejs-canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing"></div>
+                </div>
+
+                <!-- Strategy Deep Explanation (Right) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold font-mono tracking-widest text-[#F3BA2F] uppercase">Rules-Based Authority</span>
+                    <h2 class="text-3xl font-extrabold tracking-tight text-white font-tech leading-tight">
+                        We Do Not Guess. <br>We Map System Structural Breaks.
+                    </h2>
+                    
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Retail trading depends on feelings. Elite institutions trade structural liquidity and algorithmic mitigation sweeps. Our proprietary **SK System** translates institutional volume flows directly into precise, rules-based entries.
+                    </p>
+
+                    <!-- Accordion or Tech Pillars list -->
+                    <div class="space-y-3.5 pt-2">
+                        <div class="p-4 rounded-lg bg-[#0c1325]/50 border border-white/5 hover:border-[#F3BA2F]/30 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-7 h-7 rounded bg-[#F3BA2F]/10 flex items-center justify-center text-[#F3BA2F] font-bold text-xs font-tech">01</span>
+                                <h4 class="text-white font-tech font-bold text-sm">MSNR (Market Structure Net Run)</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2 pl-10">
+                                Identifying the core liquidity sweeps on higher timeframes. Once liquidity is run, we mark institutional execution zones.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-[#0c1325]/50 border border-white/5 hover:border-accentGreen/30 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-7 h-7 rounded bg-accentGreen/10 flex items-center justify-center text-accentGreen font-bold text-xs font-tech">02</span>
+                                <h4 class="text-white font-tech font-bold text-sm">RBS & SBR Transitions</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2 pl-10">
+                                Support turns into premium resistance, or resistance flips to verified institutional support with exact volume confirm bounds.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-[#0c1325]/50 border border-white/5 hover:border-accentBlue/30 transition-all">
+                            <div class="flex items-center space-x-3">
+                                <span class="w-7 h-7 rounded bg-[#0a84ff]/10 flex items-center justify-center text-[#0a84ff] font-bold text-xs font-tech">03</span>
+                                <h4 class="text-white font-tech font-bold text-sm">OCL (Overlapping Candle Levels)</h4>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2 pl-10">
+                                The point of maximum price manipulation. When candle bodies overlap at support or resistance zones, an ultra-low drawdown trigger fires.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Showcase section with specific images: image_89050e.png, image_890591.png, image_89587d.png -->
+    <section id="proof" class="py-20 relative bg-darkBg overflow-hidden">
+        <!-- Graphic gradient highlight -->
+        <div class="absolute top-[20%] right-[-10%] w-[35%] h-[35%] bg-accentGreen/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold font-mono tracking-widest text-[#F3BA2F] uppercase">Real VIP Performance</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-tech text-white">
+                    Verified Analytics & Custom Indicator Dashboards
+                </h2>
+                <p class="text-slate-400 text-sm">
+                    Unlike standard channels sending raw screenshots, we deploy high-accuracy proprietary analytics engines. Take an inside look at our advanced dashboard designs tracking target zones (SMT) and structural indicators.
+                </p>
+            </div>
+
+            <!-- Premium Grid of Showcase Images -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1: image_89050e.png -->
+                <div class="glass-panel rounded-xl overflow-hidden glass-panel-hover flex flex-col h-full group">
+                    <div class="relative overflow-hidden aspect-video bg-[#03060c] border-b border-white/5 flex items-center justify-center">
+                        <img src="image_89050e.png" alt="Ermi Antereth VIP Dashboard" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/0c1427/00f2fe?text=Premium+Analytics+Dashboard';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg to-transparent opacity-30"></div>
+                        <span class="absolute top-3 right-3 bg-accentTeal/90 text-black font-tech font-bold text-[9px] px-2.5 py-1 rounded shadow-lg uppercase tracking-wider">
+                            Real-Time Target Growth
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-tech text-accentTeal font-bold tracking-widest block uppercase">Indicator Matrix I</span>
+                            <h3 class="text-white text-lg font-bold font-tech">Ermi Antereth Analytics Dashboard</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Our bespoke platform maps account metrics, click-through win rates, real-time analytics, and daily high-volume entry counts on majors and indices.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
+                            <span>Performance Overview</span>
+                            <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-arrow-up-right-dots mr-1"></i> Active</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: image_890591.png -->
+                <div class="glass-panel rounded-xl overflow-hidden glass-panel-hover flex flex-col h-full group">
+                    <div class="relative overflow-hidden aspect-video bg-[#03060c] border-b border-white/5 flex items-center justify-center">
+                        <img src="image_890591.png" alt="VIP Stream Dashboard" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/0c1427/00e676?text=VIP+Stream+Dashboard';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg to-transparent opacity-30"></div>
+                        <span class="absolute top-3 right-3 bg-accentGreen/90 text-black font-tech font-bold text-[9px] px-2.5 py-1 rounded shadow-lg uppercase tracking-wider">
+                            Volume Flow Analysis
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-tech text-accentGreen font-bold tracking-widest block uppercase">Indicator Matrix II</span>
+                            <h3 class="text-white text-lg font-bold font-tech">VIP Member Live Watch Feed</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Watch real-time high-volume structural runs on the daily charts. This proprietary dashboard showcases daily signal success indicators and engagement rates.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
+                            <span>SBR/RBS Tracker</span>
+                            <span class="text-accentTeal font-semibold"><i class="fa-solid fa-signal mr-1"></i> Verified Live</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: image_89587d.png -->
+                <div class="glass-panel rounded-xl overflow-hidden glass-panel-hover flex flex-col h-full group">
+                    <div class="relative overflow-hidden aspect-video bg-[#03060c] border-b border-white/5 flex items-center justify-center">
+                        <img src="image_89587d.png" alt="Precision Volatility Matrix" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x400/0c1427/0a84ff?text=Precision+Volatility+Matrix';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-darkBg to-transparent opacity-30"></div>
+                        <span class="absolute top-3 right-3 bg-[#bf5af2] text-white font-tech font-bold text-[9px] px-2.5 py-1 rounded shadow-lg uppercase tracking-wider">
+                            SMT Liquidity Sweep
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-tech text-[#bf5af2] font-bold tracking-widest block uppercase">Indicator Matrix III</span>
+                            <h3 class="text-white text-lg font-bold font-tech">Deep Liquidity Volatility Saturation</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Our absolute extreme performance monitoring tool, evaluating price velocity and oxygen level parameters to flag structural exhaustion zones instantly.
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
+                            <span>SMT Target Zone</span>
+                            <span class="text-[#bf5af2] font-semibold"><i class="fa-solid fa-circle-nodes mr-1"></i> 100% Sure</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Statistics Bar -->
+    <section class="py-12 bg-[#02050b] border-t border-b border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div class="space-y-2">
+                    <p class="text-[11px] font-tech text-slate-500 uppercase tracking-widest">Total SMT Target Pips Generated</p>
+                    <h3 class="text-3xl font-extrabold font-tech text-white">+84,240</h3>
+                    <p class="text-xs text-emerald-400">All-Time Pip Record</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-[11px] font-tech text-slate-500 uppercase tracking-widest">Risk Mitigation Profile</p>
+                    <h3 class="text-3xl font-extrabold font-tech text-white">1.25%</h3>
+                    <p class="text-xs text-slate-400">Maximum Suggested Drawdown</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-[11px] font-tech text-slate-500 uppercase tracking-widest">XAU/USD Gold Specific Accuracy</p>
+                    <h3 class="text-3xl font-extrabold font-tech text-[#F3BA2F] text-gold-glow">95.4%</h3>
+                    <p class="text-xs text-slate-400">Pure SK System Rules Met</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-[11px] font-tech text-slate-500 uppercase tracking-widest">Weekly VIP Signals Delivered</p>
+                    <h3 class="text-3xl font-extrabold font-tech text-white">12 - 18</h3>
+                    <p class="text-xs text-emerald-400 font-semibold">High-Volume Confirmations Only</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Subscription Packages -->
+    <section id="pricing" class="py-24 relative bg-darkBg z-10">
+        <!-- Floating gradient accent -->
+        <div class="absolute bottom-0 left-[20%] w-[40%] h-[40%] bg-accentBlue/5 rounded-full blur-[150px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 space-y-4">
+                <span class="text-xs font-bold font-mono tracking-widest text-[#F3BA2F] uppercase">Transparent Pricing Plan</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold font-tech text-white">Join the Ermi Antereth VIP Signal Group</h2>
+                <p class="text-slate-400 text-sm">
+                    Gain immediate entry to live market signals, deep structural chart markups, and institutional level SMT verification sweeps. Pay once with Binance BEP-20 for instant lifelong configuration.
+                </p>
+
+                <!-- Billing Cycle Toggle -->
+                <div class="inline-flex items-center p-1 bg-[#0a1122] rounded-lg border border-white/5 mt-4">
+                    <button id="toggle-monthly" onclick="switchBilling('monthly')" class="px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-white bg-[#F3BA2F]/20">
+                        Monthly
+                    </button>
+                    <button id="toggle-yearly" onclick="switchBilling('yearly')" class="px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-slate-400 hover:text-white">
+                        Yearly Saver (Save 25%)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pricing Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+                
+                <!-- Package 1: Monthly/Yearly Basic -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col justify-between border border-white/5 hover:border-white/10 relative transition-all">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase block">Intermediate Access</span>
+                            <h3 class="text-white text-xl font-bold font-tech">Monthly VIP Entry</h3>
+                            <p class="text-xs text-slate-400">Perfect for traders starting their technical alignment journey.</p>
+                        </div>
+
+                        <div class="py-4 border-t border-b border-white/5">
+                            <span class="text-3xl font-extrabold text-white font-tech" id="price-basic">$99</span>
+                            <span class="text-slate-500 text-xs" id="price-basic-period"> / Month</span>
+                        </div>
+
+                        <!-- Features -->
+                        <ul class="space-y-3.5 text-xs text-slate-300">
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>8-12 Signals Weekly (All assets)</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>Core SMT Take-Profit Levels (TP1 & TP2)</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>Daily MSNR Analysis Sheets</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5 text-slate-500 line-through">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Custom 1-on-1 Strategy Reviews</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5 text-slate-500 line-through">
+                                <i class="fa-solid fa-xmark"></i>
+                                <span>Indicator Matrix Access</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <button onclick="handleSubscribe('Starter Plan')" class="w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/25 text-white font-tech font-bold text-xs tracking-wider rounded-lg transition-all cursor-pointer">
+                            SUBSCRIBE TO VIP STARTER
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 2: Lifetime Pro (Most Popular) -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col justify-between border-2 border-[#F3BA2F] relative shadow-goldGlow transition-all transform scale-105">
+                    <!-- Popular Tag -->
+                    <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-tech font-extrabold text-[10px] tracking-widest px-4 py-1 rounded-full uppercase">
+                        MOST POPULAR EXCLUSIVITY
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-mono tracking-widest text-[#F3BA2F] uppercase block">Professional Tier</span>
+                            <h3 class="text-white text-2xl font-extrabold font-tech flex items-center gap-2">
+                                Lifetime VIP Pass
+                            </h3>
+                            <p class="text-xs text-slate-400">Our signature tier. Skip subscriptions entirely and retain direct entry forever.</p>
+                        </div>
+
+                        <div class="py-4 border-t border-b border-white/5">
+                            <span class="text-5xl font-extrabold text-white font-tech">$349</span>
+                            <span class="text-[#F3BA2F] text-xs font-bold block mt-1">ONE-TIME FEE (No recurring costs)</span>
+                        </div>
+
+                        <!-- Features -->
+                        <ul class="space-y-3.5 text-xs text-slate-200">
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>Unlimited VIP Signals (XAU, EUR, BTC, DXY)</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>Full SMT Take-Profit Suite (All targets)</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>Daily RBS, SBR & OCL Entry Blueprints</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-[#F3BA2F]"></i>
+                                <span>SK System V4.2 Complete Video Course Included</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5 text-[#F3BA2F]">
+                                <i class="fa-solid fa-check"></i>
+                                <span class="font-semibold">Direct Verification Integration Access</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <button onclick="handleSubscribe('Lifetime Pass')" class="w-full py-3.5 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-tech font-extrabold text-xs tracking-widest rounded-lg hover:scale-[1.03] transition-all cursor-pointer">
+                            GET LIFETIME PASS NOW
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 3: Institution Elite -->
+                <div class="glass-panel rounded-2xl p-8 flex flex-col justify-between border border-white/5 hover:border-white/10 relative transition-all">
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <span class="text-[10px] font-mono tracking-widest text-slate-500 uppercase block">Enterprise Trading</span>
+                            <h3 class="text-white text-xl font-bold font-tech">Prop-Firm Syndicate</h3>
+                            <p class="text-xs text-slate-400">Designed specifically for prop-firm challenge pass-execution & heavy sizes.</p>
+                        </div>
+
+                        <div class="py-4 border-t border-b border-white/5">
+                            <span class="text-3xl font-extrabold text-white font-tech" id="price-prop">$249</span>
+                            <span class="text-slate-500 text-xs" id="price-prop-period"> / Month</span>
+                        </div>
+
+                        <!-- Features -->
+                        <ul class="space-y-3.5 text-xs text-slate-300">
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-accentGreen"></i>
+                                <span>Ultra-low drawdowns targeting &lt;1.5%</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-accentGreen"></i>
+                                <span>Prop-firm compliance execution filters</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-accentGreen"></i>
+                                <span>Private weekly 1-on-1 strategy live streams</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-accentGreen"></i>
+                                <span>Direct Indicator API Webhook signals integration</span>
+                            </li>
+                            <li class="flex items-center space-x-2.5">
+                                <i class="fa-solid fa-check text-accentGreen"></i>
+                                <span>Special risk profile settings dashboard</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-8">
+                        <button onclick="handleSubscribe('Prop Syndicate')" class="w-full py-3 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/25 text-white font-tech font-bold text-xs tracking-wider rounded-lg transition-all cursor-pointer">
+                            SUBSCRIBE TO SYNDICATE
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Strategy FAQ / Technical Area -->
+    <section class="py-20 relative bg-[#060a14] border-t border-white/5 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                
+                <!-- FAQ Copy (Left) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <span class="text-xs font-bold font-mono tracking-widest text-[#F3BA2F] uppercase">Support</span>
+                    <h2 class="text-3xl font-extrabold font-tech text-white">Strategy Frequently Asked Questions</h2>
+                    <p class="text-slate-400 text-sm">
+                        Everything you need to understand about the **SK System**, our target calculation methods (SMT), and why we avoid high drawdown strategies.
+                    </p>
+
+                    <!-- Feedback form mock -->
+                    <div class="p-5 rounded-xl bg-darkBg border border-white/5 space-y-4">
+                        <h4 class="text-white font-bold text-xs font-tech">HAVE AN ENTRY QUESTION?</h4>
+                        <p class="text-[11px] text-slate-500">Submit a direct query to Ermi's technical verification team. We reply within 24 hours.</p>
+                        <div class="space-y-2">
+                            <input type="email" id="faq-email" placeholder="Your trading email" class="w-full bg-[#0a1122] border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none focus:border-accentTeal">
+                            <textarea id="faq-msg" rows="3" placeholder="Which asset setup or SK System rule do you have questions about?" class="w-full bg-[#0a1122] border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none focus:border-accentTeal"></textarea>
+                        </div>
+                        <button onclick="submitFaqQuery()" class="w-full py-2 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-tech font-bold text-xs rounded-lg transition-all cursor-pointer">
+                            SUBMIT INQUIRY
+                        </button>
+                        <div id="faq-success" class="hidden text-xs text-emerald-400 font-tech text-center mt-2">
+                            <i class="fa-solid fa-check-double mr-1.5"></i> Query sent successfully to Ermi.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Accordions (Right) -->
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    <!-- Item 1 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/5">
+                        <button class="w-full px-6 py-4 flex items-center justify-between text-left text-white focus:outline-none" onclick="toggleAccordion('acc1')">
+                            <span class="font-tech font-bold text-sm">What assets do you analyze in your VIP signal feed?</span>
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" id="acc1-icon"></i>
+                        </button>
+                        <div id="acc1-content" class="px-6 pb-5 text-xs text-slate-400 leading-relaxed hidden">
+                            We focus strictly on highly liquid major indexes and pairs: **XAU/USD (Gold)** due to volatility sweeps, **EUR/USD** for institutional block mitigation, **BTC/USD** for macro crypto swing alignments, and **DXY (US Dollar Index)** which drives absolute structural balance.
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/5">
+                        <button class="w-full px-6 py-4 flex items-center justify-between text-left text-white focus:outline-none" onclick="toggleAccordion('acc2')">
+                            <span class="font-tech font-bold text-sm">How do you manage risk during high-volume era news events?</span>
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" id="acc2-icon"></i>
+                        </button>
+                        <div id="acc2-content" class="px-6 pb-5 text-xs text-slate-400 leading-relaxed hidden">
+                            Our standard stop-losses (SL) are tight, typically between 15-25 pips on Gold and majors. We calculate exactly where structural liquidity is "exhausted" (our Volatility Saturation system) so that if news breaks opposite, our loss is microscopic compared to our SMT target rewards.
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/5">
+                        <button class="w-full px-6 py-4 flex items-center justify-between text-left text-white focus:outline-none" onclick="toggleAccordion('acc3')">
+                            <span class="font-tech font-bold text-sm">What does "MSNR" and "RBS / SBR" stand for?</span>
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" id="acc3-icon"></i>
+                        </button>
+                        <div id="acc3-content" class="px-6 pb-5 text-xs text-slate-400 leading-relaxed hidden">
+                            **MSNR** means Market Structure Net Run, tracking institutional sweeps of structural extremes. **RBS** means Resistance Becomes Support, and **SBR** stands for Support Becomes Resistance. These flips, when combined with **OCL** (Overlapping Candle Levels), indicate absolute low-drawdown entry regions.
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/5">
+                        <button class="w-full px-6 py-4 flex items-center justify-between text-left text-white focus:outline-none" onclick="toggleAccordion('acc4')">
+                            <span class="font-tech font-bold text-sm">How is my VIP transaction processed?</span>
+                            <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300" id="acc4-icon"></i>
+                        </button>
+                        <div id="acc4-content" class="px-6 pb-5 text-xs text-slate-400 leading-relaxed hidden">
+                            We use direct **Binance Smart Chain BEP-20** transfers for zero friction and minimal fees. After sending USDT or BNB to our verified address: `0x8c4a2502388c2092e472e084176cdf231c08646c`, submit your transaction ID (TXID) inside our terminal.
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Risks & Footer -->
+    <footer class="bg-[#02050b] border-t border-white/5 pt-16 pb-8 relative z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Branding Col -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded bg-gradient-to-tr from-binanceGold to-accentTeal flex items-center justify-center">
+                            <i class="fa-solid fa-chart-line text-black font-extrabold text-sm"></i>
+                        </div>
+                        <span class="font-tech text-lg font-bold tracking-tight text-white">ERMI ANTERETH</span>
+                    </div>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Precision-engineered, rules-based forex market alignments on XAU/USD, EUR/USD, BTC/USD, and DXY. Uncompromising technical clarity.
+                    </p>
+                    
+                    <!-- Direct Click to Copy Area -->
+                    <div class="p-3 bg-[#0a1122] rounded-lg border border-white/5 text-xs space-y-1">
+                        <span class="text-[10px] text-slate-500 uppercase font-tech block">Binance BEP-20 Payment</span>
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-[11px] text-[#F3BA2F]">0x8c4a...646c</span>
+                            <button onclick="copyWalletAddress()" class="text-white hover:text-[#F3BA2F]"><i class="fa-regular fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Col -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-tech font-bold text-xs uppercase tracking-wider">Trading Strategy</h4>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li><a href="#strategy" class="hover:text-white transition-colors">MSNR Setup Principles</a></li>
+                        <li><a href="#strategy" class="hover:text-white transition-colors">RBS & SBR Flips</a></li>
+                        <li><a href="#strategy" class="hover:text-white transition-colors">OCL (Overlapping Candles)</a></li>
+                        <li><a href="#strategy" class="hover:text-white transition-colors">SK System V4.2 Core</a></li>
+                    </ul>
+                </div>
+
+                <!-- Assets Col -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-tech font-bold text-xs uppercase tracking-wider">Premium Assets</h4>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li><span class="text-[#F3BA2F] font-semibold">XAU/USD</span> (Gold)</li>
+                        <li><span class="text-slate-400 font-semibold">EUR/USD</span> (Liquidity Major)</li>
+                        <li><span class="text-accentGreen font-semibold">BTC/USD</span> (Crypto Pivot)</li>
+                        <li><span class="text-slate-400 font-semibold">DXY</span> (US Dollar Index)</li>
+                    </ul>
+                </div>
+
+                <!-- Direct Copy Trigger instead of Telegram newsletter -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-tech font-bold text-xs uppercase tracking-wider">Copy Payment Address</h4>
+                    <p class="text-[11px] text-slate-500">Copy our Binance address directly to your wallet of choice.</p>
+                    <div class="flex">
+                        <input readonly type="text" value="0x8c4a2502388c2092e472e084176cdf231c08646c" class="bg-[#0c1222] border border-white/5 rounded-l-md px-3 py-2 text-[10px] text-slate-400 w-full focus:outline-none">
+                        <button onclick="copyWalletAddress()" class="bg-[#F3BA2F] text-black font-bold px-3.5 py-2 text-xs rounded-r-md hover:bg-[#dfa824] transition-all"><i class="fa-regular fa-copy"></i></button>
+                    </div>
+                    <div id="footer-copy-success" class="hidden text-[10px] text-emerald-400 mt-1">
+                        <i class="fa-solid fa-check mr-1"></i> Copied BEP-20 address successfully!
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Legally Mandated Risk Disclosure Header -->
+            <div class="pt-8 border-t border-white/5 space-y-4 text-slate-600 text-[10px] leading-relaxed">
+                <span class="block text-slate-400 font-bold uppercase tracking-widest font-tech text-[9px]">HIGH RISK FINANCIAL INVESTMENT DISCLAIMER</span>
+                <p>
+                    Trading foreign exchange on margin, crypto assets, indices, and precious metals carries a high level of risk, and may not be suitable for all investment profiles. The high degree of leverage offered in modern brokerages can work against you as well as for you. Before deciding to trade foreign exchange or follow structural signals provided by **Forex Trader Ermi Antereth**, you should carefully consider your absolute investment objectives, level of market experience, and risk appetite. The possibility exists that you could sustain a loss of some or all of your initial investment capital and therefore you should not invest money that you cannot afford to lose.
+                </p>
+                <p>
+                    Any signals, analyses, or indicators showcased in this website (or referenced platforms including images **image_89050e.png**, **image_890591.png**, and **image_89587d.png**) are provided strictly for educational purposes and do not represent professional investment advice. Ermi Antereth and its developers make no warranties, expressed or implied, regarding signal accuracy or account longevity. Past performance is in no way predictive of future market movements. You assume complete technical responsibility for your execution outcomes.
+                </p>
+            </div>
+
+            <div class="pt-6 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center text-[11px] text-slate-500 gap-4">
+                <span>&copy; 2026 Ermi Antereth VIP. All Technical Rights Reserved.</span>
+                <div class="flex space-x-4">
+                    <span class="text-slate-600 font-mono">BEP-20: 0x8c4a2502388c2092e472e084176cdf231c08646c</span>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    <!-- Interactive Binance BEP-20 Checkout Modal -->
+    <div id="sub-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="max-w-md w-full glass-panel rounded-2xl p-6 border border-[#F3BA2F] relative space-y-4 shadow-goldGlow">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="w-12 h-12 rounded-full bg-yellow-500/10 text-[#F3BA2F] flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            
+            <div class="text-center space-y-1">
+                <h3 class="text-white font-bold font-tech text-lg">Binance Smart Chain Checkout</h3>
+                <p class="text-xs text-slate-400">Secure entry setup for <strong class="text-[#F3BA2F]" id="modal-plan-name">Lifetime Pass</strong></p>
+            </div>
+            
+            <div class="bg-[#050811] rounded-lg p-4 border border-white/5 space-y-3 text-xs">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Selected VIP Tier:</span>
+                    <span class="text-white font-bold" id="modal-plan-details">Lifetime VIP Pass</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Asset Signals Delivery:</span>
+                    <span class="text-emerald-400 font-bold">Immediate VIP Activation</span>
+                </div>
+                <div class="flex justify-between items-center border-t border-white/5 pt-2.5">
+                    <span class="text-white font-semibold">Price to Send (USDT / BNB):</span>
+                    <span class="text-[#F3BA2F] font-extrabold text-sm" id="modal-plan-price">$349.00 USD</span>
+                </div>
+            </div>
+
+            <!-- Core Crypto Address Copier Section -->
+            <div class="space-y-2.5">
+                <div class="p-3 bg-slate-900 rounded-lg border border-yellow-500/30">
+                    <label class="block text-[9px] text-slate-400 font-tech uppercase mb-1">BEP-20 TARGET ADDRESS (USDT/BNB)</label>
+                    <div class="flex items-center justify-between gap-2">
+                        <span id="modal-bep20-address" class="font-mono text-xs text-[#F3BA2F] overflow-hidden text-ellipsis whitespace-nowrap">0x8c4a2502388c2092e472e084176cdf231c08646c</span>
+                        <button onclick="copyWalletAddressFromModal()" class="text-white hover:text-[#F3BA2F] shrink-0 text-xs px-2 py-1 bg-white/5 rounded border border-white/10 flex items-center gap-1.5 transition-all">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Micro warning/instructions list -->
+                <div class="bg-[#0d1424] p-3 rounded-lg border border-white/5 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[9px] text-slate-500 font-tech">STEP 1: SEND CRYPTO</span>
+                        <span class="text-[9px] text-emerald-400 font-bold font-tech">BEP-20 ONLY</span>
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">
+                        Execute payment of the corresponding amount using the **Binance Smart Chain (BSC BEP-20)** network only. Any other chain may lead to loss of assets.
+                    </p>
+                </div>
+
+                <!-- Transaction Input for validation proof -->
+                <div>
+                    <label class="block text-[10px] text-slate-400 font-tech uppercase mb-1">STEP 2: ENTER TXID / TRANSACTION HASH</label>
+                    <input type="text" id="modal-hash" placeholder="Enter Transaction Hash (TXID) for confirmation" class="w-full bg-[#0a1122] border border-white/10 rounded-lg px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#F3BA2F]">
+                </div>
+            </div>
+
+            <button onclick="triggerPurchaseVerification()" class="w-full py-3 bg-gradient-to-r from-binanceGold to-accentTeal text-black font-tech font-bold text-xs tracking-wider rounded-lg shadow-goldGlow transition-all">
+                SUBMIT TRANSACTION FOR VERIFICATION
+            </button>
+            
+            <p class="text-[9px] text-center text-slate-500 leading-normal">
+                Payments verified natively on-chain. VIP setup starts automatically within minutes of validation.
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Success Popup -->
+    <div id="toast-notify" class="fixed bottom-6 right-6 z-50 glass-panel border border-[#F3BA2F] text-white px-5 py-3 rounded-xl hidden items-center space-x-3 shadow-goldGlow">
+        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <div class="text-xs">
+            <span class="font-bold font-tech block">COPIED SUCCESSFULLY</span>
+            <span class="text-slate-400 text-[10px]" id="toast-text">Address saved to clipboard.</span>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript Logic -->
+    <script>
+        // Responsive Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Copy wallet address using suggested document.execCommand('copy') logic for maximum compatibility
+        function copyWalletAddress() {
+            const address = "0x8c4a2502388c2092e472e084176cdf231c08646c";
+            const tempInput = document.createElement("input");
+            tempInput.value = address;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToastNotification("0x8c4a...646c copied to clipboard!");
+            
+            // Footer warning success indicators
+            const successEl = document.getElementById('footer-copy-success');
+            if (successEl) {
+                successEl.classList.remove('hidden');
+                setTimeout(() => {
+                    successEl.classList.add('hidden');
+                }, 3000);
+            }
+        }
+
+        function copyWalletAddressFromModal() {
+            const address = "0x8c4a2502388c2092e472e084176cdf231c08646c";
+            const tempInput = document.createElement("input");
+            tempInput.value = address;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            showToastNotification("BEP-20 address copied successfully!");
+        }
+
+        function showToastNotification(text) {
+            const toast = document.getElementById('toast-notify');
+            document.getElementById('toast-text').textContent = text;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 3000);
+        }
+
+        // Current Billing Cycle State
+        let currentBilling = 'monthly';
+
+        // Simulated VIP Signal Assets Data
+        const signalsData = {
+            XAUUSD: {
+                asset: "XAU/USD (GOLD)",
+                type: "BUY LIMIT",
+                typeClass: "bg-accentGreen text-black",
+                strategy: "MSNR Sweeps + SBR Flip Intersect",
+                entry: "2,324.50",
+                sl: "2,319.00",
+                tp: "2,341.00",
+                confidence: "98.7% Confirmed Accuracy",
+                status: "WAITING TO FILL ENTRY",
+                chartPath: "M 0 100 L 50 80 L 100 90 L 150 50 L 200 70 L 250 30 L 300 40 L 400 10"
+            },
+            EURUSD: {
+                asset: "EUR/USD (EURO)",
+                type: "SELL LIMIT",
+                typeClass: "bg-rose-500 text-white",
+                strategy: "OCL Mitigated Order Block Sweep",
+                entry: "1.08620",
+                sl: "1.08840",
+                tp: "1.08010",
+                confidence: "95.2% Volatility Sweep Proof",
+                status: "LIMIT ACTIVE - STRUCTURING RUN",
+                chartPath: "M 0 20 L 60 40 L 120 30 L 180 60 L 240 50 L 300 80 L 360 70 L 400 110"
+            },
+            BTCUSD: {
+                asset: "BTC/USD (BITCOIN)",
+                type: "BUY ORDER",
+                typeClass: "bg-accentGreen text-black",
+                strategy: "SK System V4.2 Weekly Alignment",
+                entry: "65,400.00",
+                sl: "64,800.00",
+                tp: "67,200.00",
+                confidence: "96.4% Structural Confirmation",
+                status: "LIVE TRADE RUNNING",
+                chartPath: "M 0 110 L 40 100 L 90 90 L 140 70 L 190 85 L 240 60 L 290 50 L 400 15"
+            },
+            DXY: {
+                asset: "DXY (US DOLLAR INDEX)",
+                type: "SELL MARKET",
+                typeClass: "bg-rose-500 text-white",
+                strategy: "MSNR Liquidity High Run Exhaustion",
+                entry: "104.28",
+                sl: "104.55",
+                tp: "103.60",
+                confidence: "94.8% Saturation Limit Run",
+                status: "WAITING EXHAUSTION TRIGGER",
+                chartPath: "M 0 10 L 80 25 L 160 15 L 240 45 L 320 35 L 400 95"
+            }
+        };
+
+        // Switch Live Interactive Signal Display
+        function switchLiveSignal(assetId) {
+            // Update button states
+            ['XAUUSD', 'EURUSD', 'BTCUSD', 'DXY'].forEach(key => {
+                const btn = document.getElementById(`btn-${key.toLowerCase()}`);
+                if (key === assetId) {
+                    btn.className = "py-3 font-semibold border-b-2 border-[#F3BA2F] text-white bg-[#0f192d] transition-all";
+                } else {
+                    btn.className = "py-3 font-semibold border-b-2 border-transparent text-slate-400 hover:text-white hover:bg-white/5 transition-all";
+                }
+            });
+
+            // Update parameters
+            const data = signalsData[assetId];
+            document.getElementById('sig-asset').textContent = data.asset;
+            document.getElementById('sig-type').textContent = data.type;
+            document.getElementById('sig-type').className = `px-2 py-0.5 text-[10px] font-bold tracking-widest rounded uppercase ${data.typeClass}`;
+            document.getElementById('sig-strat').textContent = data.strategy;
+            document.getElementById('sig-entry').textContent = data.entry;
+            document.getElementById('sig-sl').textContent = data.sl;
+            document.getElementById('sig-tp').textContent = data.tp;
+            document.getElementById('sig-conf').textContent = data.confidence;
+            document.getElementById('sig-status').textContent = data.status;
+
+            // Trigger visual chart transition
+            const line = document.getElementById('chart-line');
+            const shadow = document.getElementById('chart-shadow');
+            
+            line.style.opacity = '0';
+            shadow.style.opacity = '0';
+            
+            setTimeout(() => {
+                line.setAttribute('d', data.chartPath);
+                shadow.setAttribute('d', `${data.chartPath} L 400 120 L 0 120 Z`);
+                line.style.opacity = '1';
+                shadow.style.opacity = '1';
+            }, 150);
+        }
+
+        // Trigger Success Simulation inside Sandbox
+        function triggerSimulatedSuccess() {
+            const statusIndicator = document.getElementById('sig-status');
+            const slIndicator = document.getElementById('sig-sl');
+            const tpIndicator = document.getElementById('sig-tp');
+
+            statusIndicator.className = "text-[#00e676] font-bold animate-pulse";
+            statusIndicator.innerHTML = '<i class="fa-solid fa-trophy mr-1.5 animate-bounce"></i> SMT TARGET HIT (+115 PIP REWARD SUCCESS)';
+
+            slIndicator.className = "text-slate-500 font-mono text-sm";
+            tpIndicator.className = "text-emerald-400 font-mono font-extrabold text-sm animate-ping";
+
+            setTimeout(() => {
+                tpIndicator.className = "text-emerald-400 font-mono font-extrabold text-sm";
+            }, 1000);
+        }
+
+        // Pricing Toggle system
+        function switchBilling(cycle) {
+            currentBilling = cycle;
+            const btnMonthly = document.getElementById('toggle-monthly');
+            const btnYearly = document.getElementById('toggle-yearly');
+
+            const basicPrice = document.getElementById('price-basic');
+            const basicPeriod = document.getElementById('price-basic-period');
+            const propPrice = document.getElementById('price-prop');
+            const propPeriod = document.getElementById('price-prop-period');
+
+            if (cycle === 'monthly') {
+                btnMonthly.className = "px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-white bg-[#F3BA2F]/20";
+                btnYearly.className = "px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-slate-400 hover:text-white";
+                
+                basicPrice.textContent = "$99";
+                basicPeriod.textContent = " / Month";
+                propPrice.textContent = "$249";
+                propPeriod.textContent = " / Month";
+            } else {
+                btnMonthly.className = "px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-slate-400 hover:text-white";
+                btnYearly.className = "px-4 py-1.5 rounded-md font-tech text-xs font-bold transition-all text-white bg-[#F3BA2F]/20";
+                
+                basicPrice.textContent = "$74";
+                basicPeriod.textContent = " / Month (Billed Yearly)";
+                propPrice.textContent = "$186";
+                propPeriod.textContent = " / Month (Billed Yearly)";
+            }
+        }
+
+        // Modal logic with Binance payment configuration
+        function handleSubscribe(planName) {
+            const modal = document.getElementById('sub-modal');
+            const planText = document.getElementById('modal-plan-name');
+            const planPrice = document.getElementById('modal-plan-price');
+            const planDetails = document.getElementById('modal-plan-details');
+
+            planText.textContent = planName;
+            
+            if (planName === 'Starter Plan') {
+                planPrice.textContent = currentBilling === 'monthly' ? '$99.00 USDT' : '$888.00 USDT';
+                planDetails.textContent = currentBilling === 'monthly' ? 'Starter Monthly Alignment' : 'Starter Yearly Alignment (25% Saved)';
+            } else if (planName === 'Lifetime Pass') {
+                planPrice.textContent = '$349.00 USDT';
+                planDetails.textContent = 'One-time Payment (Lifetime VIP Entry)';
+            } else if (planName === 'Prop Syndicate') {
+                planPrice.textContent = currentBilling === 'monthly' ? '$249.00 USDT' : '$2,232.00 USDT';
+                planDetails.textContent = currentBilling === 'monthly' ? 'Prop-Firm Syndicate Monthly' : 'Prop-Firm Syndicate Yearly (25% Saved)';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Auto copy address to clipboard when modal opens to assist user
+            setTimeout(() => {
+                copyWalletAddressFromModal();
+            }, 400);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('sub-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // On-chain hash submit validation logic
+        function triggerPurchaseVerification() {
+            const txHash = document.getElementById('modal-hash').value;
+
+            // Remove any existing dynamic messages
+            const existingWarning = document.getElementById('modal-warning');
+            if (existingWarning) existingWarning.remove();
+
+            if (!txHash) {
+                const modalWarning = document.createElement('div');
+                modalWarning.id = 'modal-warning';
+                modalWarning.className = 'text-rose-500 text-xs font-tech text-center mt-2 animate-pulse';
+                modalWarning.textContent = "Please provide your Transaction Hash (TXID) to verify your transaction.";
+                
+                const inputParent = document.querySelector('#sub-modal .space-y-2.5');
+                if (inputParent) {
+                    inputParent.appendChild(modalWarning);
+                }
+                return;
+            }
+
+            // Create visual verification indicator within modal
+            const inputParent = document.querySelector('#sub-modal .space-y-2.5');
+            const successNotice = document.createElement('div');
+            successNotice.id = 'modal-warning';
+            successNotice.className = 'text-emerald-400 text-xs font-tech text-center mt-2 animate-bounce p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg';
+            successNotice.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1.5"></i> Transaction Submitted! Verification processing on BSC Block Heights.';
+            inputParent.appendChild(successNotice);
+
+            document.getElementById('modal-hash').value = '';
+
+            setTimeout(() => {
+                closeModal();
+                showToastNotification("Your payment verification request is queued.");
+            }, 3000);
+        }
+
+        // Submitting Mock FAQ Forms
+        function submitFaqQuery() {
+            const email = document.getElementById('faq-email').value;
+            const msg = document.getElementById('faq-msg').value;
+
+            const existingFaqWarning = document.getElementById('faq-warning');
+            if (existingFaqWarning) existingFaqWarning.remove();
+
+            if(!email || !msg) {
+                const warningEl = document.createElement('div');
+                warningEl.id = 'faq-warning';
+                warningEl.className = 'text-rose-400 text-xs font-tech text-center mt-2';
+                warningEl.textContent = "Please fill in both fields before initiating technical request.";
+                
+                const faqParent = document.getElementById('faq-success').parentNode;
+                if (faqParent) {
+                    faqParent.appendChild(warningEl);
+                }
+                return;
+            }
+            
+            document.getElementById('faq-success').classList.remove('hidden');
+            document.getElementById('faq-email').value = '';
+            document.getElementById('faq-msg').value = '';
+            setTimeout(() => {
+                document.getElementById('faq-success').classList.add('hidden');
+            }, 4000);
+        }
+
+        // Simple Accordion Handler
+        function toggleAccordion(accId) {
+            const content = document.getElementById(`${accId}-content`);
+            const icon = document.getElementById(`${accId}-icon`);
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // Simulating Live Market Price Movement
+        setInterval(() => {
+            const tickXau = document.getElementById('ticker-xau');
+            const currentXau = parseFloat(tickXau.textContent.split(' ')[0].replace(/,/g, ''));
+            const direction = Math.random() > 0.48 ? 1 : -1;
+            const change = (Math.random() * 0.4).toFixed(2);
+            const nextXau = (currentXau + parseFloat(change) * direction).toFixed(2);
+            tickXau.textContent = `${parseFloat(nextXau).toLocaleString()} (+1.46%)`;
+
+            const tickBtc = document.getElementById('ticker-btc');
+            const currentBtc = parseFloat(tickBtc.textContent.split(' ')[0].replace(/,/g, ''));
+            const nextBtc = (currentBtc + (Math.random() * 15 * direction)).toFixed(2);
+            tickBtc.textContent = `${parseFloat(nextBtc).toLocaleString()} (+2.91%)`;
+        }, 3000);
+
+        // Three.js 3D Setup representing MSNR Structural sweeps
+        window.onload = function() {
+            const container = document.getElementById('threejs-canvas-container');
+            if(!container) return;
+
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // Scene & Camera Init
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050811, 0.015);
+
+            const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+            camera.position.set(0, 15, 30);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer Setup
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xF3BA2F, 1.5, 100);
+            pointLight.position.set(10, 20, 10);
+            scene.add(pointLight);
+
+            const greenLight = new THREE.PointLight(0x00e676, 1.5, 100);
+            greenLight.position.set(-10, -10, -10);
+            scene.add(greenLight);
+
+            // Structure elements (Financial grid simulation)
+            const gridHelper = new THREE.GridHelper(40, 40, 0x1f2d4d, 0x0c172d);
+            gridHelper.position.y = -4;
+            scene.add(gridHelper);
+
+            // Generate "Trendline Nodes" (Points)
+            const geometry = new THREE.BufferGeometry();
+            const count = 120;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+
+            for (let i = 0; i < count * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 35;
+                positions[i + 1] = Math.sin(positions[i] * 0.15) * 4 + (Math.random() - 0.5) * 2;
+                positions[i + 2] = (Math.random() - 0.5) * 35;
+
+                // Color gradients (Binance Gold to Teal range)
+                colors[i] = 0.95; // R
+                colors[i + 1] = 0.73; // G
+                colors[i + 2] = 0.18 + Math.random() * 0.2; // B
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 0.65,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+
+            // Generate order blocks (Glowing cubes)
+            const blocksGroup = new THREE.Group();
+            const boxGeo = new THREE.BoxGeometry(3, 1.5, 3);
+            const boxMat1 = new THREE.MeshPhongMaterial({
+                color: 0xF3BA2F,
+                transparent: true,
+                opacity: 0.2,
+                wireframe: true
+            });
+            const boxMat2 = new THREE.MeshPhongMaterial({
+                color: 0x00e676,
+                transparent: true,
+                opacity: 0.15,
+                wireframe: true
+            });
+
+            const orderBlock1 = new THREE.Mesh(boxGeo, boxMat1);
+            orderBlock1.position.set(-8, 2, -4);
+            blocksGroup.add(orderBlock1);
+
+            const orderBlock2 = new THREE.Mesh(boxGeo, boxMat2);
+            orderBlock2.position.set(8, -1, 4);
+            blocksGroup.add(orderBlock2);
+
+            scene.add(blocksGroup);
+
+            // Interactive mouse rotation tracking
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+            });
+
+            container.addEventListener('mousemove', (e) => {
+                const deltaMove = {
+                    x: e.offsetX - previousMousePosition.x,
+                    y: e.offsetY - previousMousePosition.y
+                };
+
+                if (isDragging) {
+                    const deltaRotationQuaternion = new THREE.Quaternion()
+                        .setFromEuler(new THREE.Euler(
+                            deltaMove.y * 0.005,
+                            deltaMove.x * 0.005,
+                            0,
+                            'XYZ'
+                        ));
+                    
+                    particles.quaternion.multiplyQuaternions(deltaRotationQuaternion, particles.quaternion);
+                    blocksGroup.quaternion.multiplyQuaternions(deltaRotationQuaternion, blocksGroup.quaternion);
+                }
+
+                previousMousePosition = {
+                    x: e.offsetX,
+                    y: e.offsetY
+                };
+            });
+
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Handle window resizing
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth;
+                const newHeight = container.clientHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
+
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Auto rotate particles slowly
+                if(!isDragging) {
+                    particles.rotation.y += 0.001;
+                    blocksGroup.rotation.y -= 0.001;
+                }
+
+                // Wave effect on block positions
+                const time = Date.now() * 0.0015;
+                orderBlock1.position.y = 2 + Math.sin(time) * 0.5;
+                orderBlock2.position.y = -1 + Math.cos(time) * 0.4;
+
+                renderer.render(scene, camera);
+            }
+
+            // Fire animation
+            animate();
+        };
+    </script>
+</body>
+</html>
