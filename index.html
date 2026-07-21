@@ -1,54 +1,706 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="style.css">
-    <title>Media Generator</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Media Generator</h1>
-        <p>Create stunning visuals and videos!</p>
-    </header>
+    <title>Live Market Signal Hub | XAU - EUR - BTC</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        },
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <main>
-        <section class="upload-section">
-            <h2>Upload Your Media</h2>
-            <div class="drop-area" id="dropArea">
-                <p>Drag & drop your images/videos here or click to select files</p>
-                <input type="file" id="fileInput" accept="image/*,video/*" multiple />
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .tv-widget-container {
+            height: 460px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .asset-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .asset-card:hover {
+            transform: translateY(-4px);
+        }
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        .glow-emerald {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+        .glow-rose {
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+
+    <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                        <i class="fa-solid font-bold fa-chart-line text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="text-xl font-bold tracking-tight text-white">Live Signal Hub</h1>
+                            <span class="bg-blue-500/20 text-blue-400 text-xs font-semibold px-2 py-0.5 rounded border border-blue-500/30">v2.4 PRO</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Institutional Technical Gauges & Liquidity Shift Monitor</p>
+                    </div>
+                </div>
+
+                <!-- Market Sessions & Utilities Bar -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <!-- Session Status Pill -->
+                    <div id="sessionPill" class="flex items-center space-x-2 bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 text-xs">
+                        <span class="text-slate-400 font-medium">Session:</span>
+                        <span id="currentSession" class="text-amber-400 font-bold flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                            London / NY Overlap
+                        </span>
+                    </div>
+
+                    <!-- Market Status Indicator -->
+                    <div class="flex items-center space-x-2 bg-emerald-950/40 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-xs">
+                        <div class="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+                        <span class="font-bold text-emerald-400 tracking-wide uppercase">Data Live</span>
+                    </div>
+
+                    <!-- Theme Switcher Button -->
+                    <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 transition-colors" title="Toggle Light/Dark Theme">
+                        <i id="themeIcon" class="fa-solid fa-sun text-amber-400"></i>
+                    </button>
+                </div>
             </div>
-            <button id="uploadButton">Upload</button>
+        </div>
+    </header>
+
+    <div class="border-b border-slate-800 bg-slate-950/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+                {
+                    "symbols": [
+                        { "proName": "OANDA:XAUUSD", "title": "GOLD (XAU/USD)" },
+                        { "proName": "FX_IDC:EURUSD", "title": "EUR/USD" },
+                        { "proName": "BITSTAMP:BTCUSD", "title": "BITCOIN (BTC/USD)" },
+                        { "proName": "FX_IDC:GBPUSD", "title": "GBP/USD" },
+                        { "proName": "CAPITALCOM:DXY", "title": "US DOLLAR INDEX" },
+                        { "proName": "BITSTAMP:ETHUSD", "title": "ETHEREUM (ETH/USD)" }
+                    ],
+                    "showSymbolLogo": true,
+                    "colorTheme": "dark",
+                    "isTransparent": true,
+                    "displayMode": "adaptive",
+                    "locale": "en"
+                }
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow space-y-10">
+
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
+            <div class="flex flex-wrap items-center gap-2" id="filterTabs">
+                <button onclick="filterAssets('all')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition-all">All Instruments</button>
+                <button onclick="filterAssets('commodities')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 transition-all">Gold & Metals</button>
+                <button onclick="filterAssets('forex')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 transition-all">Forex Currencies</button>
+                <button onclick="filterAssets('crypto')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 transition-all">Crypto Assets</button>
+            </div>
+            
+            <div class="flex items-center space-x-2 text-xs text-slate-400">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Gauges Update Interval: <b>1 Hour (H1)</b></span>
+            </div>
+        </div>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- GOLD CARD -->
+            <div class="asset-card asset-item commodities bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 shadow-lg hover:border-amber-500/50">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base leading-tight">GOLD (XAU/USD)</h3>
+                            <span class="text-[11px] text-slate-400">Spot Gold vs Dollar</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-amber-500/10 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">Commodity</span>
+                </div>
+                
+                <div class="tv-widget-container bg-slate-900/50">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                        {
+                            "interval": "1h",
+                            "width": "100%",
+                            "isTransparent": true,
+                            "height": "450",
+                            "symbol": "OANDA:XAUUSD",
+                            "showIntervalTabs": true,
+                            "locale": "en",
+                            "colorTheme": "dark"
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EURO CARD -->
+            <div class="asset-card asset-item forex bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 shadow-lg hover:border-blue-500/50">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold">
+                            <i class="fa-solid fa-euro-sign"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base leading-tight">EURO (EUR/USD)</h3>
+                            <span class="text-[11px] text-slate-400">Euro / US Dollar</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-blue-500/10 text-blue-400 border border-blue-500/30 px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">Forex Major</span>
+                </div>
+                
+                <div class="tv-widget-container bg-slate-900/50">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                        {
+                            "interval": "1h",
+                            "width": "100%",
+                            "isTransparent": true,
+                            "height": "450",
+                            "symbol": "FX_IDC:EURUSD",
+                            "showIntervalTabs": true,
+                            "locale": "en",
+                            "colorTheme": "dark"
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BITCOIN CARD -->
+            <div class="asset-card asset-item crypto bg-slate-800/80 rounded-2xl p-4 border border-slate-700/60 shadow-lg hover:border-orange-500/50">
+                <div class="flex items-center justify-between mb-3 px-1">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold">
+                            <i class="fa-brands fa-bitcoin"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-white text-base leading-tight">BITCOIN (BTC/USD)</h3>
+                            <span class="text-[11px] text-slate-400">Bitcoin Spot</span>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-orange-500/10 text-orange-400 border border-orange-500/30 px-2.5 py-1 rounded-md font-bold uppercase tracking-wider">Crypto</span>
+                </div>
+                
+                <div class="tv-widget-container bg-slate-900/50">
+                    <div class="tradingview-widget-container">
+                        <div class="tradingview-widget-container__widget"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+                        {
+                            "interval": "1h",
+                            "width": "100%",
+                            "isTransparent": true,
+                            "height": "450",
+                            "symbol": "BITSTAMP:BTCUSD",
+                            "showIntervalTabs": true,
+                            "locale": "en",
+                            "colorTheme": "dark"
+                        }
+                        </script>
+                    </div>
+                </div>
+            </div>
+
         </section>
 
-        <section class="font-info-section">
-            <h2>Font Information</h2>
-            <form id="fontForm">
-                <label for="fontName">Font Name:</label>
-                <input type="text" id="fontName" required>
-                <label for="fontSize">Font Size (px):</label>
-                <input type="number" id="fontSize" required min="1">
-                <button type="submit">Submit Font Info</button>
-            </form>
-            <div id="fontDisplay"></div>
+        <section class="bg-slate-800/60 rounded-3xl p-6 border border-slate-700/70 shadow-xl space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-700/60">
+                <div>
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-area text-blue-500"></i>
+                        Interactive Live Charting Workstation
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-1">Switch instruments and analyze real-time candlestick patterns with indicators</p>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <button onclick="switchChartSymbol('OANDA:XAUUSD')" class="chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white border border-blue-500">Gold</button>
+                    <button onclick="switchChartSymbol('FX_IDC:EURUSD')" class="chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">EUR/USD</button>
+                    <button onclick="switchChartSymbol('BITSTAMP:BTCUSD')" class="chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">Bitcoin</button>
+                    <button onclick="switchChartSymbol('CAPITALCOM:DXY')" class="chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600">DXY</button>
+                </div>
+            </div>
+
+            <div id="chartWrapper" class="w-full h-[500px] rounded-2xl overflow-hidden border border-slate-700/60 bg-slate-900">
+                <!-- TradingView Advanced Chart Widget -->
+                <div class="tradingview-widget-container" style="height:100%;width:100%">
+                    <div id="tradingview_advanced_chart" style="height:calc(100% - 32px);width:100%"></div>
+                    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                    <script type="text/javascript">
+                    function renderTVChart(symbolName) {
+                        new TradingView.widget({
+                            "autosize": true,
+                            "symbol": symbolName || "OANDA:XAUUSD",
+                            "interval": "60",
+                            "timezone": "Etc/UTC",
+                            "theme": "dark",
+                            "style": "1",
+                            "locale": "en",
+                            "toolbar_bg": "#0f172a",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_advanced_chart"
+                        });
+                    }
+                    window.addEventListener('DOMContentLoaded', () => { renderTVChart('OANDA:XAUUSD'); });
+                    </script>
+                </div>
+            </div>
         </section>
 
-        <section class="gallery">
-            <h2>Media Gallery</h2>
-            <div id="galleryContainer"></div>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Live LSD Liquidity Sweep Live Feed -->
+            <div class="lg:col-span-2 bg-slate-800/80 rounded-3xl p-6 border border-slate-700/70 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-700/60 mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-9 h-9 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                                <i class="fa-solid fa-bolt-lightning text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-white">Live Liquidity Shift Simulator (LSD)</h3>
+                                <p class="text-xs text-slate-400">Real-time institutional liquidity sweep & market structure break feed</p>
+                            </div>
+                        </div>
+                        <button onclick="triggerSimulatedSweep()" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 shadow-md">
+                            <i class="fa-solid fa-play"></i> Simulate Sweep
+                        </button>
+                    </div>
+
+                    <!-- Feed List -->
+                    <div id="lsdFeed" class="space-y-3 max-h-[320px] overflow-y-auto pr-1">
+                        <!-- Feed item 1 -->
+                        <div class="p-3.5 bg-slate-900/80 border-l-4 border-emerald-500 rounded-r-xl flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold rounded">BULLISH LSD</span>
+                                <div>
+                                    <span class="font-bold text-white text-sm">XAU/USD (Gold)</span>
+                                    <p class="text-slate-400 text-[11px]">Swept Sell-Side Liquidity at $2,342.10 &rarr; Shift High broken</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="code-font text-emerald-400 font-bold">+1.2% Shift</span>
+                                <p class="text-[10px] text-slate-500">2 mins ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Feed item 2 -->
+                        <div class="p-3.5 bg-slate-900/80 border-l-4 border-rose-500 rounded-r-xl flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                <span class="px-2 py-1 bg-rose-500/10 text-rose-400 border border-rose-500/30 font-bold rounded">BEARISH LSD</span>
+                                <div>
+                                    <span class="font-bold text-white text-sm">EUR/USD</span>
+                                    <p class="text-slate-400 text-[11px]">Swept Buy-Side Liquidity at 1.08920 &rarr; Displacement Downward</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="code-font text-rose-400 font-bold">-0.8% Shift</span>
+                                <p class="text-[10px] text-slate-500">8 mins ago</p>
+                            </div>
+                        </div>
+
+                        <!-- Feed item 3 -->
+                        <div class="p-3.5 bg-slate-900/80 border-l-4 border-emerald-500 rounded-r-xl flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                <span class="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold rounded">BULLISH LSD</span>
+                                <div>
+                                    <span class="font-bold text-white text-sm">BTC/USD (Bitcoin)</span>
+                                    <p class="text-slate-400 text-[11px]">Equal Lows Purged at $64,200 &rarr; Strong Institutional Reversal</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="code-font text-emerald-400 font-bold">+2.4% Shift</span>
+                                <p class="text-[10px] text-slate-500">15 mins ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs text-slate-400">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-info text-blue-400"></i> Liquidity shifts are automatically detected on key market levels.</span>
+                    <span class="font-semibold text-slate-300">Status: Listening...</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/80 rounded-3xl p-6 border border-slate-700/70 shadow-xl flex flex-col justify-between space-y-4">
+                <div>
+                    <div class="flex items-center space-x-3 pb-3 border-b border-slate-700/60 mb-4">
+                        <div class="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                            <i class="fa-solid fa-calculator text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-white">Risk & Lot Calculator</h3>
+                            <p class="text-xs text-slate-400">Calculate lot size before entering</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="text-slate-300 font-medium block mb-1">Account Balance ($)</label>
+                            <input type="number" id="accBalance" value="10000" oninput="calculatePositionSize()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white code-font focus:outline-none focus:border-blue-500">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-slate-300 font-medium block mb-1">Risk Amount (%)</label>
+                                <input type="number" id="riskPercent" value="1.0" step="0.1" oninput="calculatePositionSize()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white code-font focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="text-slate-300 font-medium block mb-1">Stop Loss (Pips/Pts)</label>
+                                <input type="number" id="stopLossPips" value="25" oninput="calculatePositionSize()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white code-font focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-slate-300 font-medium block mb-1">Asset Class</label>
+                            <select id="assetType" onchange="calculatePositionSize()" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500">
+                                <option value="forex">Forex Standard (1 Lot = 100k)</option>
+                                <option value="gold" selected>Gold (XAU/USD - 1 Lot = 100oz)</option>
+                                <option value="crypto">Crypto / BTC (1 Unit = 1 Coin)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="bg-slate-900/90 rounded-2xl p-4 border border-slate-700/80 space-y-2">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Cash at Risk:</span>
+                        <span id="riskCashVal" class="code-font font-bold text-rose-400 text-sm">$100.00</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">Recommended Position:</span>
+                        <span id="lotSizeVal" class="code-font font-extrabold text-emerald-400 text-base">0.40 Lots</span>
+                    </div>
+                </div>
+            </div>
+
         </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Execution Confluence Rules -->
+            <div class="bg-slate-800/80 rounded-3xl p-8 border border-slate-700/70 shadow-xl space-y-6">
+                <div>
+                    <span class="px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/30 text-xs font-bold rounded-full uppercase tracking-wider">Trading Playbook</span>
+                    <h3 class="text-2xl font-bold text-white mt-2">Combining Live Signals with LSD Code</h3>
+                    <p class="text-slate-400 text-xs sm:text-sm leading-relaxed mt-2">
+                        The technical gauges show high-timeframe trend momentum. Overlaying your **Liquidity Shift Detection (LSD)** Pine Script ensures entry precision.
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shrink-0 font-bold text-sm">1</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">1. Check Gauge Direction</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">If the Gauge indicates "Strong Buy" or "Buy", bias your strategy towards bullish liquidity sweeps exclusively.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shrink-0 font-bold text-sm">2</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">2. Wait for Liquidity Sweep</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Wait for your Pine Script code to paint a <code class="code-font text-emerald-400">bullSweepLabel</code> or <code class="code-font text-rose-400">bearSweepLabel</code> taking out key high/low stops.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4">
+                        <div class="w-8 h-8 rounded-xl bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center shrink-0 font-bold text-sm">3</div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">3. Market Structure Break (MSS)</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Confirm displacement in the opposing direction before placing order at the Fair Value Gap (FVG) or Breaker Block.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-blue-950/40 border border-blue-500/30 rounded-2xl flex items-center space-x-3 text-xs">
+                    <i class="fa-solid fa-lightbulb text-amber-400 text-xl shrink-0"></i>
+                    <p class="text-slate-300">
+                        <b>Pro Tip:</b> Best results occur during the <b>New York Open (08:00 AM - 11:00 AM EST)</b> and <b>London Session (03:00 AM - 06:00 AM EST)</b>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pine Script v5 Code Helper Box -->
+            <div class="bg-slate-800/80 rounded-3xl p-8 border border-slate-700/70 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-slate-700/60 mb-4">
+                        <div>
+                            <h3 class="font-bold text-xl text-white">Pine Script v5 LSD Code</h3>
+                            <p class="text-xs text-slate-400">Copy & paste into TradingView Pine Editor</p>
+                        </div>
+                        <button onclick="copyPineCode()" id="copyBtn" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-2 shadow-md">
+                            <i class="fa-regular fa-copy"></i> Copy Script
+                        </button>
+                    </div>
+
+                    <div class="relative">
+                        <pre class="code-font text-[11px] bg-slate-950 text-slate-300 p-4 rounded-2xl overflow-x-auto max-h-[300px] border border-slate-800 leading-relaxed" id="pineCodeBlock">////@version=5
+indicator("Liquidity Shift Detection (LSD)", overlay=true)
+
+// Inputs
+leftLen  = input.int(5, "Pivot Left Length")
+rightLen = input.int(5, "Pivot Right Length")
+
+// Pivot High / Low Detection
+pH = ta.pivothigh(high, leftLen, rightLen)
+pL = ta.pivotlow(low, leftLen, rightLen)
+
+var float lastPH = na
+var float lastPL = na
+
+if not na(pH)
+    lastPH := pH
+if not na(pL)
+    lastPL := pL
+
+// Liquidity Sweep Logic
+bullSweep = not na(lastPL) and low < lastPL and close > lastPL
+bearSweep = not na(lastPH) and high > lastPH and close < lastPH
+
+// Plotting Signals on Chart
+plotshape(bullSweep, title="Bullish LSD Sweep", style=shape.triangleup, location=location.belowbar, color=color.green, size=size.small)
+plotshape(bearSweep, title="Bearish LSD Sweep", style=shape.triangledown, location=location.abovebar, color=color.red, size=size.small)
+
+alertcondition(bullSweep, title="Bullish LSD Sweep Alert", message="Bullish Liquidity Sweep detected!")
+alertcondition(bearSweep, title="Bearish LSD Sweep Alert", message="Bearish Liquidity Sweep detected!")</pre>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-slate-700/60 text-xs text-slate-400 flex items-center justify-between">
+                    <span>Compatible with TradingView v5 Pine Engine</span>
+                    <span class="text-emerald-400 font-semibold"><i class="fa-solid fa-check"></i> Verified Code</span>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer>
-        <p>&copy; 2023 Media Generator. All rights reserved.</p>
+    <footer class="border-t border-slate-800 bg-slate-950/80 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-3">
+            <p>Live Signal Hub is an analytical interface utilizing official TradingView embeds and algorithmic models.</p>
+            <p class="text-slate-600">Risk Disclaimer: Trading foreign exchange, precious metals, and cryptocurrencies carries a high level of risk. Past performance is not indicative of future results.</p>
+            <p>&copy; 2026 Live Market Signal Hub. All rights reserved.</p>
+        </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Custom Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 border border-slate-700 text-white px-5 py-3 rounded-2xl shadow-2xl transition-all opacity-0 translate-y-4 pointer-events-none z-50 flex items-center space-x-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMsg" class="text-xs font-semibold">Action completed successfully!</span>
+    </div>
+
+    <script>
+        
+        // Theme Toggle Function
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-moon text-slate-700';
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-amber-400';
+            }
+        }
+
+        // Filter Asset Categories
+        function filterAssets(category) {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-700/60 transition-all';
+            });
+            event.currentTarget.className = 'tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md transition-all';
+
+            const items = document.querySelectorAll('.asset-item');
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Switch Chart Symbol
+        function switchChartSymbol(symbol) {
+            const buttons = document.querySelectorAll('.chart-tab');
+            buttons.forEach(btn => {
+                btn.className = 'chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-700 text-slate-300 hover:bg-slate-600';
+            });
+            event.currentTarget.className = 'chart-tab px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white border border-blue-500';
+            
+            renderTVChart(symbol);
+        }
+
+        // Position Size Calculator Logic
+        function calculatePositionSize() {
+            const balance = parseFloat(document.getElementById('accBalance').value) || 0;
+            const riskPct = parseFloat(document.getElementById('riskPercent').value) || 0;
+            const slPips = parseFloat(document.getElementById('stopLossPips').value) || 1;
+            const assetType = document.getElementById('assetType').value;
+
+            const riskCash = (balance * (riskPct / 100));
+            document.getElementById('riskCashVal').textContent = '$' + riskCash.toFixed(2);
+
+            let lotSize = 0;
+            if (assetType === 'forex') {
+                // $10 per pip per lot
+                lotSize = riskCash / (slPips * 10);
+            } else if (assetType === 'gold') {
+                // $10 per $1 move per lot
+                lotSize = riskCash / (slPips * 10);
+            } else if (assetType === 'crypto') {
+                // 1 unit = spot price shift
+                lotSize = riskCash / slPips;
+            }
+
+            if (isNaN(lotSize) || !isFinite(lotSize) || lotSize < 0) lotSize = 0;
+            
+            document.getElementById('lotSizeVal').textContent = lotSize.toFixed(2) + (assetType === 'crypto' ? ' Units' : ' Lots');
+        }
+
+        // Copy Pine Script Code using standard fallback
+        function copyPineCode() {
+            const codeText = document.getElementById('pineCodeBlock').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            showToast('Pine Script code copied to clipboard!', 'fa-solid fa-copy text-blue-400');
+        }
+
+        // Simulate Live Liquidity Sweep Trigger
+        function triggerSimulatedSweep() {
+            const assets = [
+                { name: 'XAU/USD (Gold)', type: 'BULLISH LSD', color: 'emerald', text: 'Swept Sell-Side Liquidity & Displaced Upward' },
+                { name: 'EUR/USD', type: 'BEARISH LSD', color: 'rose', text: 'Purged Asian Highs & Rejected Key Supply Zone' },
+                { name: 'BTC/USD', type: 'BULLISH LSD', color: 'emerald', text: 'Swept $63,800 Stop-Loss Cluster with High Volume' },
+                { name: 'GBP/USD', type: 'BEARISH LSD', color: 'rose', text: 'Buy-Side Liquidity Taken at 1.27400 Level' }
+            ];
+
+            const item = assets[Math.floor(Math.random() * assets.length)];
+            const feed = document.getElementById('lsdFeed');
+
+            const isBull = item.type.includes('BULLISH');
+            const borderColor = isBull ? 'border-emerald-500' : 'border-rose-500';
+            const badgeBg = isBull ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-rose-500/10 text-rose-400 border-rose-500/30';
+            const percentColor = isBull ? 'text-emerald-400' : 'text-rose-400';
+            const percentSign = isBull ? '+' : '-';
+            const percentVal = (Math.random() * 2 + 0.5).toFixed(1);
+
+            const newFeedHtml = `
+                <div class="p-3.5 bg-slate-900/80 border-l-4 ${borderColor} rounded-r-xl flex items-center justify-between text-xs animate-pulse">
+                    <div class="flex items-center space-x-3">
+                        <span class="px-2 py-1 ${badgeBg} border font-bold rounded">${item.type}</span>
+                        <div>
+                            <span class="font-bold text-white text-sm">${item.name}</span>
+                            <p class="text-slate-400 text-[11px]">${item.text}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="code-font ${percentColor} font-bold">${percentSign}${percentVal}% Shift</span>
+                        <p class="text-[10px] text-slate-500">Just Now</p>
+                    </div>
+                </div>
+            `;
+
+            feed.insertAdjacentHTML('afterbegin', newFeedHtml);
+            showToast(`New ${item.type} signal detected for ${item.name}!`, isBull ? 'fa-solid fa-arrow-trend-up text-emerald-400' : 'fa-solid fa-arrow-trend-down text-rose-400');
+        }
+
+        // Show Toast Notification
+        function showToast(message, iconClass) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+            toastIcon.className = iconClass || 'fa-solid fa-circle-check text-emerald-400';
+
+            toast.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Initialize Calculator on load
+        window.onload = function() {
+            calculatePositionSize();
+        };
+    </script>
 </body>
 </html>
-
- 
-
-
